@@ -1,4 +1,4 @@
-import { car, gameStarted } from './gameState.js';
+import { gameStarted } from './gameState.js';
 import { GLTFLoader } from '../libs/GLTFLoader.js';
 import { addCarHeadlights } from './lighting.js';
 // import { animate } from './gameLoop.js';

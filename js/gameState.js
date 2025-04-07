@@ -7,7 +7,6 @@ export let renderer;
 export let car;
 export let level = 1;
 export let timer = 60;
-export let gameStarted = false;
 export let gameFinished = false;
 export const score = { value: 0 };
 
@@ -25,6 +24,7 @@ export const obstacles = [];
 export const checkpoints = [];
 export const walls = [];
 export const leaderboard = [];
+export const gameStarted = false;
 // export const camera = new THREE.PerspectiveCamera();
 // export const renderer = new THREE.WebGLRenderer();
 
