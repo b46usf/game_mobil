@@ -2,33 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>3D Car Game</title>
   <link rel="icon" href="./img/mobil_karakter.png" type="image/png">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./css/main.css" />
 </head>
-<body>
-  <div id="game-container"></div>
+<body class="bg-black overflow-hidden m-0 p-0 text-white font-sans">
+
+  <div id="game-container" class="w-full h-screen"></div>
 
   <!-- UI -->
-  <div id="score"></div>
-  <div id="timer"></div>
-  <div id="checkpointText">Checkpoint!</div>
-  <div id="endUI"></div>
-  <div id="mainMenu" class="menu">
-    <h1>🚗 Turbo Car Game</h1>
-    <button id="startButton">Start Game</button>
-  </div>
-  <canvas id="fireworks"></canvas>
+  <div id="score" class="absolute top-4 left-4 text-lg font-bold z-20">Score: 0</div>
+  <div id="timer" class="absolute top-4 right-4 text-lg font-bold z-20">00:00</div>
+  <div id="checkpointText" class="absolute hidden text-4xl font-extrabold text-green-400 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">Checkpoint!</div>
 
-  <!-- Kontrol Mobile -->
-  <div id="mobile-controls">
-    <button id="leftBtn">⬅️</button>
-    <button id="rightBtn">➡️</button>
-    <button id="upBtn">⬆️</button>
+  <div id="endUI" class="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-30 hidden"></div>
+
+  <div id="mainMenu" class="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-30">
+    <h1 class="text-4xl font-bold mb-4">🚗 Turbo Car Game</h1>
+    <button id="startButton" class="bg-blue-600 hover:bg-blue-800 px-6 py-2 text-xl rounded shadow-lg transition">Start Game</button>
   </div>
 
-  <!-- Scripts -->
+  <canvas id="fireworks" class="absolute top-0 left-0 w-full h-full z-10 pointer-events-none"></canvas>
+
+  <!-- Overlay jika device dalam mode potret -->
+  <div id="rotate-warning" class="fixed inset-0 bg-black bg-opacity-90 text-white text-center flex items-center justify-center z-[9999] hidden">
+    <div class="p-4">
+      <p class="text-xl font-bold">🔄 Please rotate your device</p>
+      <p class="mt-2 text-lg">This game only works in <strong>landscape mode (16:9)</strong>.</p>
+    </div>
+  </div>
+
+  <!-- Mobile Controls - Left (⬅️ ➡️) -->
+  <div id="mobile-controls-left" class="absolute bottom-6 left-6 z-40 hidden flex flex-col gap-4">
+    <button id="leftBtn" class="bg-white text-black text-3xl px-4 py-2 rounded">⬅️</button>
+    <button id="rightBtn" class="bg-white text-black text-3xl px-4 py-2 rounded">➡️</button>
+  </div>
+  
+  <!-- Mobile Controls - Right (⬆️ ⬇️) -->
+  <div id="mobile-controls-right" class="absolute bottom-6 right-6 z-40 hidden flex flex-col gap-4">
+    <button id="upBtn" class="bg-white text-black text-3xl px-4 py-2 rounded">⬆️</button>
+    <button id="downBtn" class="bg-white text-black text-3xl px-4 py-2 rounded">⬇️</button>
+  </div>
+  
+
+  <!-- Script -->
   <script type="module" src="./js/main.js"></script>
 </body>
 </html>
