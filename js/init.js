@@ -2,7 +2,7 @@ import { scene, setCamera, setRenderer, keys, level } from './gameState.js';
 import * as THREE from '../libs/three.module.js';
 // import { GLTFLoader } from '../libs/GLTFLoader.js';
 import { spawnMixedObstacles } from './obstacle.js';
-import { generateCheckpoints } from './checkpoint.js';
+// import { generateCheckpoints } from './checkpoint.js';
 // import { createScoreText } from './score.js';
 // import { animate } from './gameLoop.js';
 import { addLighting } from './lighting.js';
