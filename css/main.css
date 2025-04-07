@@ -33,12 +33,12 @@ body {
 }
 
 /* Mobile landscape: tampilkan kontrol */
-@media (max-width: 768px) and (orientation: landscape) {
+/* @media (max-width: 768px) and (orientation: landscape) {
   #mobile-controls-left,
   #mobile-controls-right {
     display: flex !important;
   }
-}
+} */
 
 /* Tambahan gaya UI */
 #score, #timer {
