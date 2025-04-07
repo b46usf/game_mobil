@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from '../libs/three.min.js';
 
 export let scene, camera, renderer, car;
 
