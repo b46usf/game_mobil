@@ -29,8 +29,8 @@ function init() {
   loader.load('model/Turbo_Star_Car.glb', gltf => {
     car = gltf.scene;
     car.scale.set(1.5, 1.5, 1.5);
-    car.rotation.y = Math.PI;
-    car.position.set(0, 0, 0);
+    // car.rotation.y = Math.PI;
+    car.position.set(0, 1, 0);
     scene.add(car);
   });
 
