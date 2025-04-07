@@ -1,3 +1,4 @@
+import { initScene } from './init';
 export function setupUI() {
   const startButton = document.getElementById('startButton');
 
@@ -18,5 +19,6 @@ export function setupUI() {
       document.getElementById('mobile-controls-left')?.classList.add('show-controls');
       document.getElementById('mobile-controls-right')?.classList.add('show-controls');
     }
+    initScene();
   });
 }
