@@ -29,7 +29,7 @@ function init() {
   loader.load('model/Turbo_Star_Car.glb', gltf => {
     car = gltf.scene;
     car.scale.set(1.5, 1.5, 1.5);
-    // car.rotation.y = Math.PI;
+    car.rotation.y = Math.PI;
     car.position.set(0, 1, 0);
     scene.add(car);
   });
@@ -76,7 +76,7 @@ function animate() {
 
     car.position.z += 0.5;
 
-    camera.position.set(car.position.x, car.position.y + 5, car.position.z - 10);
+    camera.position.set(car.position.x, car.position.y + 5, car.position.z + 10);
     camera.lookAt(car.position.x, car.position.y + 1.5, car.position.z);
 
     obstacles.forEach(obs => {
