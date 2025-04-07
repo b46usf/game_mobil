@@ -1,9 +1,9 @@
-// import { initScene } from './init.js';
+import { initScene } from './init.js';
 export function setupUI() {
   const startButton = document.getElementById('startButton');
 
   startButton.addEventListener('click', () => {
-    // initScene();
+    initScene();
     // Sembunyikan main menu
     document.getElementById('mainMenu').style.display = 'none';
 
