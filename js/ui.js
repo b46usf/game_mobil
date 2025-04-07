@@ -3,6 +3,7 @@ export function setupUI() {
   const startButton = document.getElementById('startButton');
 
   startButton.addEventListener('click', () => {
+    initScene();
     // Sembunyikan main menu
     document.getElementById('mainMenu').style.display = 'none';
 
@@ -19,6 +20,6 @@ export function setupUI() {
       document.getElementById('mobile-controls-left')?.classList.add('show-controls');
       document.getElementById('mobile-controls-right')?.classList.add('show-controls');
     }
-    initScene();
+    
   });
 }
