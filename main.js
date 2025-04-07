@@ -1,6 +1,9 @@
 let scene, camera, renderer, car, score = 0, speed = 0.5;
-let obstacles = [], points = [], roads = [], checkpoints = [];
+let obstacles = [], points = [], roads = [], checkpoints = [], walls = [];
 const keys = { ArrowLeft: false, ArrowRight: false, ArrowUp: false, ArrowDown: false };
+let gameFinished = false, gameStarted = false, level = 1;
+let timer = 60;
+let leaderboard = [];
 
 function init() {
   scene = new THREE.Scene();
@@ -36,55 +39,164 @@ function init() {
     road.position.z = -500 * i;
     scene.add(road);
     roads.push(road);
-  }
 
-  for (let i = 0; i < 3; i++) {
     const left = new THREE.Mesh(new THREE.BoxGeometry(0.5, 1, 500), new THREE.MeshStandardMaterial({ color: 0x888888 }));
     left.position.set(-10, 0.5, -500 * i);
     scene.add(left);
+    walls.push(left);
 
     const right = new THREE.Mesh(new THREE.BoxGeometry(0.5, 1, 500), new THREE.MeshStandardMaterial({ color: 0x888888 }));
     right.position.set(10, 0.5, -500 * i);
     scene.add(right);
+    walls.push(right);
   }
 
   generateObstacles();
   generateCheckpoints();
-  createPortalGates();
-  createScoreText();
+  createStartFinishLine();
+  createUI();
 
   window.addEventListener('resize', onWindowResize, false);
-  window.addEventListener('keydown', e => keys[e.key] = true);
+  window.addEventListener('keydown', e => {
+    keys[e.key] = true;
+    if (!gameStarted) startGame();
+  });
   window.addEventListener('keyup', e => keys[e.key] = false);
 
   animate();
 }
 
-function createPortalGates() {
-  const createGate = (z, text) => {
-    const arch = new THREE.Mesh(
-      new THREE.BoxGeometry(12, 4, 1),
-      new THREE.MeshStandardMaterial({ color: 0xffffff })
-    );
-    arch.position.set(0, 2, z);
-    scene.add(arch);
+function createUI() {
+  const scoreDiv = document.createElement('div');
+  scoreDiv.id = 'score';
+  scoreDiv.style.position = 'absolute';
+  scoreDiv.style.top = '10px';
+  scoreDiv.style.left = '10px';
+  scoreDiv.style.color = 'white';
+  scoreDiv.style.fontSize = '24px';
+  scoreDiv.innerText = 'Score: 0';
+  document.body.appendChild(scoreDiv);
 
-    const loader = new THREE.FontLoader();
-    loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', font => {
-      const geometry = new THREE.TextGeometry(text, {
-        font: font,
-        size: 1,
-        height: 0.2,
+  const checkpointText = document.createElement('div');
+  checkpointText.id = 'checkpointText';
+  checkpointText.style.position = 'absolute';
+  checkpointText.style.top = '50%';
+  checkpointText.style.left = '50%';
+  checkpointText.style.transform = 'translate(-50%, -50%)';
+  checkpointText.style.fontSize = '48px';
+  checkpointText.style.color = '#00ff00';
+  checkpointText.style.display = 'none';
+  checkpointText.style.fontWeight = 'bold';
+  checkpointText.innerText = 'Checkpoint!';
+  document.body.appendChild(checkpointText);
+
+  const timerDiv = document.createElement('div');
+  timerDiv.id = 'timer';
+  timerDiv.style.position = 'absolute';
+  timerDiv.style.top = '10px';
+  timerDiv.style.right = '10px';
+  timerDiv.style.color = 'white';
+  timerDiv.style.fontSize = '24px';
+  timerDiv.innerText = 'Time: 60';
+  document.body.appendChild(timerDiv);
+
+  const endDiv = document.createElement('div');
+  endDiv.id = 'endUI';
+  endDiv.style.position = 'absolute';
+  endDiv.style.top = '40%';
+  endDiv.style.left = '50%';
+  endDiv.style.transform = 'translate(-50%, -50%)';
+  endDiv.style.fontSize = '36px';
+  endDiv.style.color = 'white';
+  endDiv.style.display = 'none';
+  endDiv.style.textAlign = 'center';
+  document.body.appendChild(endDiv);
+
+  const fireworksCanvas = document.createElement('canvas');
+  fireworksCanvas.id = 'fireworks';
+  fireworksCanvas.style.position = 'absolute';
+  fireworksCanvas.style.top = '0';
+  fireworksCanvas.style.left = '0';
+  fireworksCanvas.style.width = '100%';
+  fireworksCanvas.style.height = '100%';
+  fireworksCanvas.style.pointerEvents = 'none';
+  document.body.appendChild(fireworksCanvas);
+}
+
+function startGame() {
+  gameStarted = true;
+  const countdown = setInterval(() => {
+    if (!gameFinished) {
+      timer--;
+      document.getElementById("timer").innerText = `Time: ${timer}`;
+      if (timer <= 0) {
+        clearInterval(countdown);
+        endGame();
+      }
+    }
+  }, 1000);
+}
+
+function endGame() {
+  gameFinished = true;
+  const endUI = document.getElementById('endUI');
+  endUI.innerHTML = `Game Over<br>Score: ${score}`;
+  endUI.style.display = 'block';
+  leaderboard.push(score);
+  leaderboard.sort((a, b) => b - a);
+  if (leaderboard.length > 5) leaderboard = leaderboard.slice(0, 5);
+  endUI.innerHTML += `<br><br>Leaderboard:<br>${leaderboard.map((s, i) => `${i + 1}. ${s}`).join('<br>')}`;
+  endUI.innerHTML += `<br><br><button onclick="location.reload()">Restart</button>`;
+
+  startFireworks();
+}
+
+function startFireworks() {
+  const canvas = document.getElementById('fireworks');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const particles = [];
+
+  function createParticle(x, y) {
+    for (let i = 0; i < 100; i++) {
+      particles.push({
+        x,
+        y,
+        angle: Math.random() * 2 * Math.PI,
+        speed: Math.random() * 5 + 2,
+        radius: Math.random() * 3 + 2,
+        alpha: 1,
+        decay: Math.random() * 0.02 + 0.01,
+        color: `hsl(${Math.random() * 360}, 100%, 60%)`
       });
-      const material = new THREE.MeshStandardMaterial({ color: 0x0000ff });
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(-4, 4, z);
-      scene.add(mesh);
-    });
-  };
+    }
+  }
 
-  createGate(0, 'START');
-  createGate(-5000, 'FINISH');
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p, i) => {
+      p.x += Math.cos(p.angle) * p.speed;
+      p.y += Math.sin(p.angle) * p.speed;
+      p.alpha -= p.decay;
+      if (p.alpha <= 0) particles.splice(i, 1);
+    });
+
+    particles.forEach(p => {
+      ctx.globalAlpha = p.alpha;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+    });
+
+    ctx.globalAlpha = 1;
+    if (particles.length > 0) requestAnimationFrame(animateParticles);
+  }
+
+  createParticle(canvas.width / 2, canvas.height / 2);
+  animateParticles();
 }
 
 function generateCheckpoints() {
@@ -99,31 +211,6 @@ function generateCheckpoints() {
     scene.add(checkpoint);
     checkpoints.push(checkpoint);
   }
-}
-
-function createScoreText() {
-  const div = document.createElement('div');
-  div.id = 'score';
-  div.style.position = 'absolute';
-  div.style.top = '10px';
-  div.style.left = '10px';
-  div.style.color = 'white';
-  div.style.fontSize = '24px';
-  div.innerText = 'Score: 0';
-  document.body.appendChild(div);
-
-  const checkpointText = document.createElement('div');
-  checkpointText.id = 'checkpointText';
-  checkpointText.style.position = 'absolute';
-  checkpointText.style.top = '50%';
-  checkpointText.style.left = '50%';
-  checkpointText.style.transform = 'translate(-50%, -50%)';
-  checkpointText.style.fontSize = '48px';
-  checkpointText.style.color = '#00ff00';
-  checkpointText.style.display = 'none';
-  checkpointText.style.fontWeight = 'bold';
-  checkpointText.innerText = 'Checkpoint!';
-  document.body.appendChild(checkpointText);
 }
 
 function showCheckpointText() {
