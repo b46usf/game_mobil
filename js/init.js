@@ -9,7 +9,7 @@ import { addLighting } from './lighting.js';
 import { addGround } from './ground.js';
 import { generateRoads } from './road.js';
 import { generateWalls } from './wall.js';
-import { loadCar } from './loadCar.js';
+import { loadCar } from './car.js';
 
 
 export function initScene() {

@@ -1,8 +1,7 @@
 import { GLTFLoader } from '../libs/GLTFLoader.js';
 import { animate } from './gameLoop.js';
 import { addCarHeadlights } from './lighting.js';
-
-export let car;
+import { car } from './gameState.js';
 
 export function loadCar(scene, mode, onLoaded = () => {}) {
   const loader = new GLTFLoader();
