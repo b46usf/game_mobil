@@ -1,6 +1,6 @@
 import { car, renderer, scene, camera, roads } from './gameState.js';
-import { updateCarMovement } from './movement.js';
-import { updateCamera } from './camera.js';
+// import { updateCarMovement } from './movement.js';
+// import { updateCamera } from './camera.js';
 // import { updateObstacles } from './obstacle.js';
 
 export function animate() {
@@ -8,8 +8,8 @@ export function animate() {
 
   // if (!car) return;
 
-  updateCarMovement();
-  updateCamera();
+  // updateCarMovement();
+  // updateCamera();
   // updateObstacles(car);
 
   // Update posisi jalan (looping jalan terus-menerus)
