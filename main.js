@@ -28,7 +28,8 @@ function init() {
   const loader = new THREE.GLTFLoader();
   loader.load('model/Turbo_Star_Car.glb', gltf => {
     car = gltf.scene;
-    car.scale.set(0.5, 0.5, 0.5);
+    car.scale.set(1.5, 1.5, 1.5);
+    car.rotation.y = Math.PI;
     car.position.set(0, 0, 0);
     scene.add(car);
   });
