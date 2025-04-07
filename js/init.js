@@ -3,10 +3,10 @@ import * as THREE from '../libs/three.module.js';
 // import { spawnMixedObstacles } from './obstacle.js';
 // import { generateCheckpoints } from './checkpoint.js';
 // import { createScoreText } from './score.js';
-// import { addLighting } from './lighting.js';
-// import { addGround } from './ground.js';
-// import { generateRoads } from './road.js';
-// import { generateWalls } from './wall.js';
+import { addLighting } from './lighting.js';
+import { addGround } from './ground.js';
+import { generateRoads } from './road.js';
+import { generateWalls } from './wall.js';
 // import { loadCar } from './car.js';
 
 
@@ -29,10 +29,10 @@ export function initScene() {
 
   const timeOfDay = new Date().getHours();
   const mode = timeOfDay >= 18 || timeOfDay < 6 ? 'malam' : 'siang';
-  // addLighting(scene, mode);
-  // addGround(scene, mode);
-  // generateRoads(scene, mode);
-  // generateWalls(scene, mode);
+  addLighting(scene, mode);
+  addGround(scene, mode);
+  generateRoads(scene, mode);
+  generateWalls(scene, mode);
 
   /* loadCar(scene, mode, () => {
     console.log('Mobil siap! Game bisa dimulai atau UI bisa ditampilkan');
