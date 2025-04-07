@@ -2,6 +2,8 @@ import * as THREE from '../libs/three.module.js';
 
 // 🎥 Utama
 export let scene = new THREE.Scene();
+export let camera = new THREE.PerspectiveCamera();
+export let renderer = new THREE.WebGLRenderer();
 export let car;
 export let level = 1;
 export let timer = 60;
@@ -23,8 +25,8 @@ export const obstacles = [];
 export const checkpoints = [];
 export const walls = [];
 export const leaderboard = [];
-export const camera = new THREE.PerspectiveCamera();
-export const renderer = new THREE.WebGLRenderer();
+// export const camera = new THREE.PerspectiveCamera();
+// export const renderer = new THREE.WebGLRenderer();
 
 // 🔄 Untuk update nilai global dari file lain
 export function setScene(newScene) {
