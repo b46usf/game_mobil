@@ -10,9 +10,8 @@ window.addEventListener('DOMContentLoaded', () => {
   listenOrientation();
   setupUI();
   initScene();
-  setupInput();
+  
   /* 
-  setupInput();
   playBackgroundMusic();
   animate(); */
 });
