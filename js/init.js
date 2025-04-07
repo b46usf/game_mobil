@@ -1,6 +1,6 @@
 import { setScene, camera, setCamera, renderer, setRenderer, keys, level } from './gameState.js';
 import * as THREE from '../libs/three.module.js';
-// import { spawnMixedObstacles } from './obstacle.js';
+import { spawnMixedObstacles } from './obstacle.js';
 // import { generateCheckpoints } from './checkpoint.js';
 // import { createScoreText } from './score.js';
 import { addLighting } from './lighting.js';
@@ -37,14 +37,13 @@ export function initScene() {
   generateWalls(scene, mode);
   loadCar(scene, mode);
 
-  // generateObstacles(scene, 10);
-  // spawnMixedObstacles(10 + level * 2);
+  spawnMixedObstacles(10 + level * 2);
   setupInput();
   handleResize();
 
   window.addEventListener('resize', handleResize);
-  window.addEventListener('keydown', e => keys[e.key] = true);
-  window.addEventListener('keyup', e => keys[e.key] = false);
+  // window.addEventListener('keydown', e => keys[e.key] = true);
+  // window.addEventListener('keyup', e => keys[e.key] = false);
 }
 
 function handleResize() {
