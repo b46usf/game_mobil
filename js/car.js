@@ -17,7 +17,7 @@ export function loadCar(scene, mode) {
     }
 
     console.log('Loading car...');
-    console.log(car, gameStarted, scene, mode);
+    console.log(car, scene, mode);
     // Jalankan callback jika sudah dimuat (misalnya mulai animasi)
     // animate();
   });
