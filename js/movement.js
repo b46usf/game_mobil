@@ -1,17 +1,17 @@
 import { car, keys } from './gameState.js';
 
-let speed = 0.2;
-const maxSpeed = 1.2;
-const minSpeed = 0.05;
-const baseSpeed = 0.2;
-const acceleration = 0.015;
-const deceleration = 0.03;
-const brakingPower = 0.08;
-const friction = 0.005;
-const strafeBase = 0.15;
+let speed = 1;
+const maxSpeed = 2;
+const minSpeed = 0.5;
+const baseSpeed = 0.5;
+const acceleration = 0.2;
+const deceleration = 0.05;
+const brakingPower = 0.05;
+const friction = 0.05;
+const strafeBase = 0.2;
 const turnMultiplierWhenBraking = 1.5; // Belok lebih tajam saat ngerem
 const slowZoneZ = [-300, -200]; // Zona rintangan yang bikin lambat
-const slowZoneSpeedLimit = 0.6;
+const slowZoneSpeedLimit = 0.5;
 
 export function updateCarMovement() {
   // 🔼 Akselerasi

@@ -7,7 +7,7 @@ export function loadCar(scene, mode) {
   const loader = new GLTFLoader();
   loader.load('model/Turbo_Star_Car.glb', gltf => {
     const car = gltf.scene;
-    car.scale.set(1.5, 1.5, 1.5);
+    car.scale.set(2, 2, 2);
     car.rotation.y = Math.PI;
     car.position.set(0, 1, 0);
     setCar(car);
