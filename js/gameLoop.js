@@ -1,7 +1,7 @@
 import { car, renderer, scene, camera, roads } from './gameState.js';
 import { updateCarMovement } from './movement.js';
 import { updateCamera } from './camera.js';
-import { updateObstacles } from './Obstacles.js';
+import { updateObstacles } from './obstacle.js';
 
 export function animate() {
   requestAnimationFrame(animate);
