@@ -1,4 +1,4 @@
-import { scene, camera, setCamera, renderer, setRenderer, keys, level } from './gameState.js';
+import { setScene, camera, setCamera, renderer, setRenderer, keys, level } from './gameState.js';
 import * as THREE from '../libs/three.module.js';
 // import { spawnMixedObstacles } from './obstacle.js';
 // import { generateCheckpoints } from './checkpoint.js';
@@ -12,8 +12,10 @@ import { setupInput } from './input.js';
 
 export function initScene() {
   // Atur background dan fog untuk scene global
+  const scene = new THREE.Scene()
   scene.background = new THREE.Color(0x202020);
   scene.fog = new THREE.Fog(0x202020, 10, 100);
+  setScene(scene);
 
   // Kamera
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
