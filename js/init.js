@@ -6,7 +6,7 @@ import { spawnMixedObstacles } from './obstacle.js';
 import { addLighting } from './lighting.js';
 import { addGround } from './ground.js';
 import { generateRoads } from './road.js';
-import { generateWalls } from './wall.js';
+// import { generateWalls } from './wall.js';
 import { loadCar } from './car.js';
 import { setupInput } from './input.js';
 
@@ -34,7 +34,7 @@ export function initScene() {
   addLighting(scene, mode);
   addGround(scene, mode);
   generateRoads(scene, mode);
-  generateWalls(scene, mode);
+  // generateWalls(scene, mode);
   loadCar(scene, mode);
 
   spawnMixedObstacles(10 + level * 2);
