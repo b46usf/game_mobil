@@ -2,13 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Turbo Star Game</title>
-  <link rel="stylesheet" href="main.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Car Game</title>
+  <link rel="icon" href="./img/mobil_karakter.png" type="image/png">
+  <link rel="stylesheet" href="./css/main.css" />
 </head>
 <body>
   <div id="game-container"></div>
-  <script src="libs/three.min.js"></script>
-  <script src="libs/GLTFLoader.js"></script>
-  <script src="main.js"></script>
+
+  <!-- UI -->
+  <div id="score"></div>
+  <div id="timer"></div>
+  <div id="checkpointText">Checkpoint!</div>
+  <div id="endUI"></div>
+  <div id="mainMenu" class="menu">
+    <h1>🚗 Turbo Car Game</h1>
+    <button id="startButton">Start Game</button>
+  </div>
+  <canvas id="fireworks"></canvas>
+
+  <!-- Kontrol Mobile -->
+  <div id="mobile-controls">
+    <button id="leftBtn">⬅️</button>
+    <button id="rightBtn">➡️</button>
+    <button id="upBtn">⬆️</button>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="./js/main.js"></script>
 </body>
 </html>
