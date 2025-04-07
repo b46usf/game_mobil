@@ -1,4 +1,4 @@
-import { initScene } from './init';
+import { initScene } from './init.js';
 export function setupUI() {
   const startButton = document.getElementById('startButton');
 
