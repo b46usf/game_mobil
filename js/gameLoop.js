@@ -18,6 +18,7 @@ export function animate() {
       road.position.z -= 1500;
     }
   }); */
-
+  console.log('Loading car...');
+  console.log(car, scene, camera);
   renderer.render(scene, camera);
 }
