@@ -1,7 +1,8 @@
+import { car, gameStarted } from './gameState.js';
 import { GLTFLoader } from '../libs/GLTFLoader.js';
 // import { animate } from './gameLoop.js';
 // import { addCarHeadlights } from './lighting.js';
-import { car } from './gameState.js';
+
 
 export function loadCar(scene, mode) {
   const loader = new GLTFLoader();
@@ -13,14 +14,14 @@ export function loadCar(scene, mode) {
     scene.add(car);
 
     // Tambahkan lampu mobil jika malam
-    /* if (mode === 'malam') {
+    if (mode === 'malam') {
       addCarHeadlights(car, scene);
     }
 
     if (!gameStarted) {
         gameStarted = true;
-        animate();
-    } */
+        // animate();
+    }
 
     // Jalankan callback jika sudah dimuat (misalnya mulai animasi)
   });
