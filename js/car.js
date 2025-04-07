@@ -1,6 +1,6 @@
 import { GLTFLoader } from '../libs/GLTFLoader.js';
 import { addCarHeadlights } from './lighting.js';
-// import { animate } from './gameLoop.js';
+import { animate } from './gameLoop.js';
 
 export function loadCar(scene, mode) {
   const loader = new GLTFLoader();
@@ -19,6 +19,6 @@ export function loadCar(scene, mode) {
     console.log('Loading car...');
     console.log(car, scene, mode);
     // Jalankan callback jika sudah dimuat (misalnya mulai animasi)
-    // animate();
+    animate();
   });
 }
