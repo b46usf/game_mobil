@@ -1,11 +1,10 @@
-let scene, camera, renderer, car, obstacles = [], points = [], score = 0;
-let roads = [];
-
-const keys = { ArrowLeft: false, ArrowRight: false };
+let scene, camera, renderer, car, score = 0, speed = 0.5;
+let obstacles = [], points = [], roads = [];
+const keys = { ArrowLeft: false, ArrowRight: false, ArrowUp: false, ArrowDown: false };
 
 function init() {
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xaaaaaa); // background kelabu
+  scene.background = new THREE.Color(0xaaaaaa);
 
   camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 5, -10);
@@ -18,9 +17,7 @@ function init() {
   const light = new THREE.DirectionalLight(0xffffff, 1);
   light.position.set(0, 10, 10);
   scene.add(light);
-
-  const ambientLight = new THREE.AmbientLight(0x404040);
-  scene.add(ambientLight);
+  scene.add(new THREE.AmbientLight(0x404040));
 
   const loader = new THREE.GLTFLoader();
   loader.load('model/Turbo_Star_Car.glb', gltf => {
@@ -31,52 +28,28 @@ function init() {
     scene.add(car);
   });
 
-  // Infinite road segments
   for (let i = 0; i < 3; i++) {
     const road = new THREE.Mesh(
       new THREE.BoxGeometry(20, 0.1, 500),
-      new THREE.MeshStandardMaterial({ color: 0x000000 }) // jalan hitam
+      new THREE.MeshStandardMaterial({ color: 0x000000 })
     );
     road.position.z = -500 * i;
     scene.add(road);
     roads.push(road);
   }
 
-  // Pembatas jalan kiri dan kanan
+  // Pembatas kiri-kanan
   for (let i = 0; i < 3; i++) {
-    let left = new THREE.Mesh(
-      new THREE.BoxGeometry(0.5, 1, 500),
-      new THREE.MeshStandardMaterial({ color: 0x888888 })
-    );
+    const left = new THREE.Mesh(new THREE.BoxGeometry(0.5, 1, 500), new THREE.MeshStandardMaterial({ color: 0x888888 }));
     left.position.set(-10, 0.5, -500 * i);
     scene.add(left);
 
-    let right = new THREE.Mesh(
-      new THREE.BoxGeometry(0.5, 1, 500),
-      new THREE.MeshStandardMaterial({ color: 0x888888 })
-    );
+    const right = new THREE.Mesh(new THREE.BoxGeometry(0.5, 1, 500), new THREE.MeshStandardMaterial({ color: 0x888888 }));
     right.position.set(10, 0.5, -500 * i);
     scene.add(right);
   }
 
-  // Obstacle dan point
-  for (let i = 0; i < 20; i++) {
-    let obs = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.MeshStandardMaterial({ color: 0xff0000 })
-    );
-    obs.position.set((Math.random() - 0.5) * 18, 0.5, -Math.random() * 1000);
-    scene.add(obs);
-    obstacles.push({ mesh: obs, direction: Math.random() > 0.5 ? 1 : -1 });
-
-    let point = new THREE.Mesh(
-      new THREE.SphereGeometry(0.5),
-      new THREE.MeshStandardMaterial({ color: 0xffff00 })
-    );
-    point.position.set((Math.random() - 0.5) * 18, 0.5, -Math.random() * 1000);
-    scene.add(point);
-    points.push(point);
-  }
+  generateObstacles();
 
   window.addEventListener('resize', onWindowResize, false);
   window.addEventListener('keydown', e => keys[e.key] = true);
@@ -85,46 +58,68 @@ function init() {
   animate();
 }
 
+function generateObstacles() {
+  for (let i = 0; i < 10; i++) {
+    let red = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ color: 0xff0000 }));
+    red.position.set((Math.random() - 0.5) * 18, 0.5, car ? car.position.z - 100 - Math.random() * 500 : -Math.random() * 1000);
+    scene.add(red);
+    obstacles.push({ mesh: red, direction: Math.random() > 0.5 ? 1 : -1, type: 'bad' });
+
+    let yellow = new THREE.Mesh(new THREE.SphereGeometry(0.5), new THREE.MeshStandardMaterial({ color: 0xffff00 }));
+    yellow.position.set((Math.random() - 0.5) * 18, 0.5, car ? car.position.z - 100 - Math.random() * 500 : -Math.random() * 1000);
+    scene.add(yellow);
+    obstacles.push({ mesh: yellow, direction: Math.random() > 0.5 ? 1 : -1, type: 'good' });
+  }
+}
+
+function updateScoreDisplay() {
+  document.getElementById("score").innerText = `Score: ${score}`;
+}
+
 function animate() {
   requestAnimationFrame(animate);
 
-  if (car) {
-    if (keys.ArrowLeft && car.position.x > -9) car.position.x -= 0.2;
-    if (keys.ArrowRight && car.position.x < 9) car.position.x += 0.2;
+  if (!car) return;
 
-    car.position.z -= 0.5;
+  if (keys.ArrowLeft && car.position.x > -9) car.position.x -= 0.2;
+  if (keys.ArrowRight && car.position.x < 9) car.position.x += 0.2;
 
-    camera.position.set(car.position.x, car.position.y + 5, car.position.z + 10);
-    camera.lookAt(car.position.x, car.position.y + 1.5, car.position.z);
+  if (keys.ArrowUp) speed = Math.min(speed + 0.01, 1.5);
+  if (keys.ArrowDown) speed = Math.max(speed - 0.02, 0.1);
 
-    // Infinite road movement
-    roads.forEach(road => {
-      if (car.position.z - road.position.z < -500) {
-        road.position.z -= 1500;
+  car.position.z -= speed;
+  camera.position.set(car.position.x, car.position.y + 5, car.position.z + 10);
+  camera.lookAt(car.position.x, car.position.y + 1.5, car.position.z);
+
+  roads.forEach(road => {
+    if (car.position.z - road.position.z < -500) {
+      road.position.z -= 1500;
+    }
+  });
+
+  // Infinite obstacle logic
+  obstacles.forEach((obj, i) => {
+    const mesh = obj.mesh;
+    mesh.position.y += 0.02 * obj.direction;
+    if (mesh.position.y > 1 || mesh.position.y < 0.3) obj.direction *= -1;
+
+    if (mesh.position.distanceTo(car.position) < 1) {
+      if (obj.type === 'good') {
+        score += 1;
+        scene.remove(mesh);
+        obstacles[i] = null;
+      } else if (obj.type === 'bad') {
+        score = Math.max(0, score - 1);
+        scene.remove(mesh);
+        obstacles[i] = null;
       }
-    });
+      updateScoreDisplay();
+    }
+  });
 
-    // Gerak naik turun obstacles
-    obstacles.forEach(obj => {
-      const obs = obj.mesh;
-      obs.position.y += 0.02 * obj.direction;
-      if (obs.position.y > 1 || obs.position.y < 0.3) obj.direction *= -1;
-
-      if (obs.position.distanceTo(car.position) < 1) {
-        alert("Kena obstacle! Game Over.\nSkor: " + score);
-        window.location.reload();
-      }
-    });
-
-    points.forEach((pt, i) => {
-      if (pt && pt.position.distanceTo(car.position) < 1) {
-        score++;
-        scene.remove(pt);
-        points[i] = null;
-        console.log("Skor:", score);
-      }
-    });
-  }
+  // Clean and regenerate obstacles
+  obstacles = obstacles.filter(o => o);
+  if (obstacles.length < 10) generateObstacles();
 
   renderer.render(scene, camera);
 }
