@@ -1,4 +1,4 @@
-import { scene, setCamera, setRenderer, keys, level } from './gameState.js';
+import { scene, camera, setCamera, renderer, setRenderer, keys, level } from './gameState.js';
 import * as THREE from '../libs/three.module.js';
 // import { spawnMixedObstacles } from './obstacle.js';
 // import { generateCheckpoints } from './checkpoint.js';
@@ -16,12 +16,12 @@ export function initScene() {
   scene.fog = new THREE.Fog(0x202020, 10, 100);
 
   // Kamera
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 5, -10);
   setCamera(camera);
 
   // Renderer
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
   document.getElementById('game-container').appendChild(renderer.domElement);
