@@ -1,9 +1,9 @@
 import { GLTFLoader } from '../libs/GLTFLoader.js';
-import { animate } from './gameLoop.js';
-import { addCarHeadlights } from './lighting.js';
+// import { animate } from './gameLoop.js';
+// import { addCarHeadlights } from './lighting.js';
 import { car } from './gameState.js';
 
-export function loadCar(scene, mode, onLoaded = () => {}) {
+export function loadCar(scene, mode) {
   const loader = new GLTFLoader();
   loader.load('model/Turbo_Star_Car.glb', gltf => {
     car = gltf.scene;
@@ -13,16 +13,15 @@ export function loadCar(scene, mode, onLoaded = () => {}) {
     scene.add(car);
 
     // Tambahkan lampu mobil jika malam
-    if (mode === 'malam') {
+    /* if (mode === 'malam') {
       addCarHeadlights(car, scene);
     }
 
     if (!gameStarted) {
         gameStarted = true;
         animate();
-    }
+    } */
 
     // Jalankan callback jika sudah dimuat (misalnya mulai animasi)
-    onLoaded();
   });
 }

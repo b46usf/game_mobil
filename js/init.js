@@ -7,7 +7,7 @@ import { addLighting } from './lighting.js';
 import { addGround } from './ground.js';
 import { generateRoads } from './road.js';
 import { generateWalls } from './wall.js';
-// import { loadCar } from './car.js';
+import { loadCar } from './car.js';
 import { setupInput } from './input.js';
 
 export function initScene() {
@@ -33,10 +33,7 @@ export function initScene() {
   addGround(scene, mode);
   generateRoads(scene, mode);
   generateWalls(scene, mode);
-
-  /* loadCar(scene, mode, () => {
-    console.log('Mobil siap! Game bisa dimulai atau UI bisa ditampilkan');
-  }); */
+  loadCar(scene, mode);
 
   // generateObstacles(scene, 10);
   // spawnMixedObstacles(10 + level * 2);
