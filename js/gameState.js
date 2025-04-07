@@ -2,8 +2,8 @@ import * as THREE from '../libs/three.module.js';
 
 // 🎥 Utama
 export let scene = new THREE.Scene();
-export let camera = new THREE.PerspectiveCamera();
-export let renderer = new THREE.WebGLRenderer();
+export let camera;
+export let renderer;
 export let car;
 export let level = 1;
 export let timer = 60;
