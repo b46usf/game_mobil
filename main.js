@@ -38,7 +38,7 @@ function init() {
     new THREE.BoxGeometry(20, 0.1, 500),
     new THREE.MeshStandardMaterial({ color: 0x333333 })
   );
-  road.position.z = 250;
+  road.position.z = -250;
   scene.add(road);
 
   // Tambah obstacle dan point
@@ -74,7 +74,7 @@ function animate() {
     if (keys.ArrowLeft) car.position.x -= 0.2;
     if (keys.ArrowRight) car.position.x += 0.2;
 
-    car.position.z += 0.5;
+    car.position.z -= 0.5;
 
     camera.position.set(car.position.x, car.position.y + 5, car.position.z + 10);
     camera.lookAt(car.position.x, car.position.y + 1.5, car.position.z);
