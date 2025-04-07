@@ -1,16 +1,23 @@
-import { scene, camera, renderer, car } from './init.js';
-
-let speed = 0.1;
+import { car, renderer, scene, camera, roads } from './gameState.js';
+import { updateCarMovement } from './movement.js';
+import { updateCamera } from './camera.js';
+import { updateObstacles } from './Obstacles.js';
 
 export function animate() {
   requestAnimationFrame(animate);
-  update();
-  renderer.render(scene, camera);
-}
 
-function update() {
-  car.position.z += speed;
-  camera.position.z = car.position.z - 10;
-  camera.position.x = car.position.x;
-  camera.lookAt(car.position);
+  if (!car) return;
+
+  updateCarMovement();
+  updateCamera();
+  updateObstacles(car);
+
+  // Update posisi jalan (looping jalan terus-menerus)
+  roads.forEach(road => {
+    if (car.position.z - road.position.z < -500) {
+      road.position.z -= 1500;
+    }
+  });
+
+  renderer.render(scene, camera);
 }

@@ -1,81 +1,57 @@
+import { scene, setCamera, setRenderer, keys, level } from './gameState.js';
 import * as THREE from '../libs/three.module.js';
-import { GLTFLoader } from '../libs/GLTFLoader.js';
-import { generateObstacles } from './obstacles.js';
-import { generateCheckpoints } from './checkpoints.js';
-import { createPortalGates } from './portals.js';
-import { createScoreText } from './score.js';
-import { animate } from './gameLoop.js';
+// import { GLTFLoader } from '../libs/GLTFLoader.js';
+import { spawnMixedObstacles } from './obstacle.js';
+import { generateCheckpoints } from './checkpoint.js';
+// import { createScoreText } from './score.js';
+// import { animate } from './gameLoop.js';
+import { addLighting } from './lighting.js';
+import { addGround } from './ground.js';
+import { generateRoads } from './road.js';
+import { generateWalls } from './wall.js';
+import { loadCar } from './loadCar.js';
 
-export let scene, camera, renderer, car, roads = [], keys = {};
 
 export function initScene() {
-  scene = new THREE.Scene();
+  // Atur background dan fog untuk scene global
   scene.background = new THREE.Color(0x202020);
+  scene.fog = new THREE.Fog(0x202020, 10, 100);
 
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  // Kamera
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 5, -10);
-  camera.lookAt(0, 0, 0);
+  setCamera(camera);
 
-  renderer = new THREE.WebGLRenderer({ antialias: true });
+  // Renderer
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
   document.getElementById('game-container').appendChild(renderer.domElement);
+  setRenderer(renderer);
 
-  const light = new THREE.DirectionalLight(0xffffff, 1);
-  light.position.set(0, 10, 10).normalize();
-  scene.add(light);
-  scene.add(new THREE.AmbientLight(0x404040));
+  const timeOfDay = new Date().getHours();
+  const mode = timeOfDay >= 18 || timeOfDay < 6 ? 'malam' : 'siang';
+  addLighting(scene, mode);
+  addGround(scene, mode);
+  generateRoads(scene, mode);
+  generateWalls(scene, mode);
 
-  // Load 3D car model
-  const loader = new GLTFLoader();
-  loader.load('model/Turbo_Star_Car.glb', gltf => {
-    car = gltf.scene;
-    car.scale.set(1.5, 1.5, 1.5);
-    car.rotation.y = Math.PI;
-    car.position.set(0, 1, 0);
-    scene.add(car);
+  loadCar(scene, mode, () => {
+    // Callback setelah mobil dimuat
+    console.log('Mobil siap! Game bisa dimulai atau UI bisa ditampilkan');
   });
 
-  // Generate roads
-  for (let i = 0; i < 3; i++) {
-    const road = new THREE.Mesh(
-      new THREE.BoxGeometry(20, 0.1, 500),
-      new THREE.MeshStandardMaterial({ color: 0x000000 })
-    );
-    road.position.z = -500 * i;
-    scene.add(road);
-    roads.push(road);
-  }
+  generateObstacles(scene, 10);
+  spawnMixedObstacles(10 + level * 2);
+  setupInput();
+  handleResize();
 
-  // Generate walls
-  for (let i = 0; i < 3; i++) {
-    const left = new THREE.Mesh(
-      new THREE.BoxGeometry(0.5, 1, 500),
-      new THREE.MeshStandardMaterial({ color: 0x888888 })
-    );
-    left.position.set(-10, 0.5, -500 * i);
-    scene.add(left);
-
-    const right = new THREE.Mesh(
-      new THREE.BoxGeometry(0.5, 1, 500),
-      new THREE.MeshStandardMaterial({ color: 0x888888 })
-    );
-    right.position.set(10, 0.5, -500 * i);
-    scene.add(right);
-  }
-
-  generateObstacles(scene);
-  generateCheckpoints(scene);
-  createPortalGates(scene);
-  createScoreText(scene);
-
-  window.addEventListener('resize', onWindowResize);
+  window.addEventListener('resize', handleResize);
   window.addEventListener('keydown', e => keys[e.key] = true);
   window.addEventListener('keyup', e => keys[e.key] = false);
-
-  animate();
 }
 
-function onWindowResize() {
+function handleResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);

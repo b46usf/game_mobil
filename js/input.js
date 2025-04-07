@@ -1,16 +1,38 @@
-import { car } from './init.js';
+import { keys } from './gameState.js';
 
 export function setupInput() {
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') car.position.x -= 0.5;
-    if (e.key === 'ArrowRight') car.position.x += 0.5;
+  // 🎮 Keyboard input
+  window.addEventListener('keydown', (e) => {
+    if (keys.hasOwnProperty(e.key)) {
+      keys[e.key] = true;
+    }
   });
 
-  const leftBtn = document.getElementById('leftBtn');
-  const rightBtn = document.getElementById('rightBtn');
+  window.addEventListener('keyup', (e) => {
+    if (keys.hasOwnProperty(e.key)) {
+      keys[e.key] = false;
+    }
+  });
 
-  if (leftBtn && rightBtn) {
-    leftBtn.addEventListener('touchstart', () => car.position.x -= 0.5);
-    rightBtn.addEventListener('touchstart', () => car.position.x += 0.5);
-  }
+  // 📱 Mobile button input
+  const mappings = [
+    { id: 'leftBtn', key: 'ArrowLeft' },
+    { id: 'rightBtn', key: 'ArrowRight' },
+    { id: 'upBtn', key: 'ArrowUp' },
+    { id: 'downBtn', key: 'ArrowDown' }
+  ];
+
+  mappings.forEach(({ id, key }) => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+
+    // 📲 Touch
+    btn.addEventListener('touchstart', () => keys[key] = true);
+    btn.addEventListener('touchend', () => keys[key] = false);
+
+    // 🖱️ Mouse (opsional untuk desktop)
+    btn.addEventListener('mousedown', () => keys[key] = true);
+    btn.addEventListener('mouseup', () => keys[key] = false);
+    btn.addEventListener('mouseleave', () => keys[key] = false);
+  });
 }
