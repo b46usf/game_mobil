@@ -1,4 +1,3 @@
-import { gameStarted } from './gameState.js';
 import { GLTFLoader } from '../libs/GLTFLoader.js';
 import { addCarHeadlights } from './lighting.js';
 // import { animate } from './gameLoop.js';
@@ -17,13 +16,9 @@ export function loadCar(scene, mode) {
       addCarHeadlights(car, scene);
     }
 
-    if (!gameStarted) {
-        gameStarted = true;
-        // animate();
-    }
-
     console.log('Loading car...');
     console.log(car, gameStarted, scene, mode);
     // Jalankan callback jika sudah dimuat (misalnya mulai animasi)
+    // animate();
   });
 }
